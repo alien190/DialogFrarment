@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DialogFrarment</string>
+    <string name="pref_name">com.example.ivanovnv.dialogfrarment.PREFERENCES</string>
 </resources>

@@ -6,9 +6,11 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
 
 /**
  * Created by IvanovNV on 19.02.2018.
@@ -19,12 +21,14 @@ public class InfoDialogFragment extends DialogFragment {
     private EditText mEditText;
     public static final String TAG = InfoDialogFragment.class.getSimpleName();
     private DialogCallback mCallback;
+    private String initString;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder  builder = new AlertDialog.Builder(getActivity());
         View inflate = getActivity().getLayoutInflater().inflate(R.layout.di_info,null);
         mEditText = inflate.findViewById(R.id.et_info);
+        mEditText.setText(initString);
 
         builder.setTitle("Info")
                 .setView(inflate)
@@ -41,8 +45,9 @@ public class InfoDialogFragment extends DialogFragment {
     }
 
 
-    public static void show(FragmentManager manager) {
+    public static void showString(FragmentManager manager,String txt) {
         InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
+        infoDialogFragment.initString = txt;
         infoDialogFragment.show(manager,TAG);
     }
 
@@ -55,6 +60,7 @@ public class InfoDialogFragment extends DialogFragment {
         super.onAttach(context);
         if (context instanceof DialogCallback){
             mCallback = (DialogCallback) context;
+
         }
         else {
             throw new ClassCastException(context.toString()+" must implement DialogCallback");

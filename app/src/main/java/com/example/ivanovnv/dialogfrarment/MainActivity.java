@@ -1,5 +1,7 @@
 package com.example.ivanovnv.dialogfrarment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +22,9 @@ public class MainActivity extends AppCompatActivity implements InfoDialogFragmen
         mBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            InfoDialogFragment.show(getFragmentManager());
+                SharedPreferences prefs = getSharedPreferences(getString(R.string.pref_name), Context.MODE_PRIVATE);
+
+                InfoDialogFragment.showString(getFragmentManager(),prefs.getString("value",""));
 
             }
         });
@@ -29,5 +33,9 @@ public class MainActivity extends AppCompatActivity implements InfoDialogFragmen
     @Override
     public void setPositiveResult(String result) {
         Toast.makeText(this,result,Toast.LENGTH_SHORT).show();
+        SharedPreferences prefs = getSharedPreferences(getString(R.string.pref_name), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("value",result)
+                .commit();
     }
 }
