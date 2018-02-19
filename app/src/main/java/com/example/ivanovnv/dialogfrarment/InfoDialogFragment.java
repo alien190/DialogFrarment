@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -16,6 +18,7 @@ public class InfoDialogFragment extends DialogFragment {
 
     private EditText mEditText;
     public static final String TAG = InfoDialogFragment.class.getSimpleName();
+    private DialogCallback mCallback;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -25,7 +28,14 @@ public class InfoDialogFragment extends DialogFragment {
 
         builder.setTitle("Info")
                 .setView(inflate)
-                .setPositiveButton("true",null);
+                .setPositiveButton("true", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(mEditText.getText().length()>0){
+                            mCallback.setPositiveResult(mEditText.getText().toString());
+                        }
+                    }
+                });
         return builder.create();
 
     }
@@ -35,4 +45,26 @@ public class InfoDialogFragment extends DialogFragment {
         InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
         infoDialogFragment.show(manager,TAG);
     }
+
+    public interface DialogCallback {
+        void setPositiveResult (String result);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof DialogCallback){
+            mCallback = (DialogCallback) context;
+        }
+        else {
+            throw new ClassCastException(context.toString()+" must implement DialogCallback");
+        }
+        }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
 }
+
